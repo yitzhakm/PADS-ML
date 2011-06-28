@@ -33,19 +33,19 @@ nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info 
       ;
       (
          (2711798 | 2228734 | 1 | 
-            <-1010071740 Some>
+            <9727346500 Some>
              | 
-            <-1010071740 Some>
+            <9727346500 Some>
              | 
-            <-1010071740 Some>
+            <9727346500 Some>
              | 
-            <-1010071740 Some>
+            <9727346500 Some>
              | 
             <
                <75407 Small_zip>
                 Some>
              | 
-            <674355321 Ramp>
+            <4317116487801 Ramp>
              | 2 | 0 | 250912 | LOCAL)
           | 
          [
@@ -55,19 +55,19 @@ nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info 
       ;
       (
          (2711797 | 2228733 | 1 | 
-            <563754772 Some>
+            <9153689364 Some>
              | 
-            <563754772 Some>
+            <9153689364 Some>
              | 
-            <28722068 Some>
+            <4323689364 Some>
              | 
-            <28722068 Some>
+            <4323689364 Some>
              | 
             <
                <79762 Small_zip>
                 Some>
              | 
-            <334777653 Ramp>
+            <4512197922101 Ramp>
              | 2 | 0 | 1614540 | LOCAL)
           | 
          [
@@ -79,19 +79,19 @@ nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info 
       (
          nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info = No information, span = [5:1,5:101]
          (2711797 | 2228733 | 1 | 
-            <563754772 Some>
+            <9153689364 Some>
              | 
-            <563754772 Some>
+            <9153689364 Some>
              | 
-            <28722068 Some>
+            <4323689364 Some>
              | 
-            <28722068 Some>
+            <4323689364 Some>
              | 
             <
                <79762 Small_zip>
                 Some>
              | 
-            <334777653 Ramp>
+            <4512197922101 Ramp>
              | 2 | 0 | 1614540 | LOCAL)
           | 
          [

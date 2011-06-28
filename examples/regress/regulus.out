@@ -5,7 +5,7 @@ Debug output:
       (
          {2}
           | 
-         <-882746925 Some>
+         <1309319123 Some>
           | 
          < None>
           | 5001 | 
@@ -35,7 +35,7 @@ Debug output:
           | 
          < None>
           | 
-         <-882745237 Some>
+         <1309320811 Some>
           | 5074 | 
          {
             (dns1 | bob.com)
@@ -56,11 +56,11 @@ Debug output:
                   }
                 | 
                {
-                  (start_time | -882745025)
+                  (start_time | 1309321023)
                   }
                 | 
                {
-                  (end_time | -882744954)
+                  (end_time | 1309321094)
                   }
                 | 
                {

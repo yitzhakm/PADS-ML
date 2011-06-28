@@ -63,7 +63,7 @@ CAMLP5_DUMP_LIBS_OPT = $(foreach lib,$(CAMLP5_DUMP_LIB_NAMES),$(CAMLP5_PATH)/$(l
 LIBS_OPT=str.cmxa xml-light.cmxa
 
 # core modules all have interfaces
-CORE_MODULES=padscId Description baseTypeDescriptions padscError names ast hostLanguage simpleAst \
+CORE_MODULES=padscId description baseTypeDescriptions padscError names ast hostLanguage simpleAst \
 	common \
 	simpleAstTx typeChecker typeGenerator sTypeGenerator \
 	genPDGenerator parserGenerator traversalGenerator sTraversalGenerator \
