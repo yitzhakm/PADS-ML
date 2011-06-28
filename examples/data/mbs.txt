@@ -1,0 +1,5 @@
+122Joe|Wright|450|95|790
+n/aEd|Wood|10|47|31
+124Chris|Nolan|80|93|85
+125Tim|Burton|30|82|71
+126George|Lucas|32|62|40

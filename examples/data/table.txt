@@ -1,0 +1,4 @@
+george costanza|ee|3421
+jerry seinfeld|cs|2312
+elaine benez|as|3100
+cosmo kramer|hi|4321

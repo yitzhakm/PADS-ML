@@ -1,0 +1,65 @@
+########################################################################
+#                                                                      #
+#             This software is part of the padsml package              #
+#           Copyright (c) 2006-2011 AT&T Knowledge Ventures            #
+#                      and is licensed under the                       #
+#                        Common Public License                         #
+#                      by AT&T Knowledge Ventures                      #
+#                                                                      #
+#                A copy of the License is available at                 #
+#                    www.padsproj.org/License.html                     #
+#                                                                      #
+#  This program contains certain software code or other information    #
+#  ("AT&T Software") proprietary to AT&T Corp. ("AT&T").  The AT&T     #
+#  Software is provided to you "AS IS". YOU ASSUME TOTAL RESPONSIBILITY#
+#  AND RISK FOR USE OF THE AT&T SOFTWARE. AT&T DOES NOT MAKE, AND      #
+#  EXPRESSLY DISCLAIMS, ANY EXPRESS OR IMPLIED WARRANTIES OF ANY KIND  #
+#  WHATSOEVER, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF#
+#  MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, WARRANTIES OF  #
+#  TITLE OR NON-INFRINGEMENT.  (c) AT&T Corp.  All rights              #
+#  reserved.  AT&T is a registered trademark of AT&T Corp.             #
+#                                                                      #
+#                   Network Services Research Center                   #
+#                          AT&T Labs Research                          #
+#                           Florham Park NJ                            #
+#                                                                      #
+#            Yitzhak Mandelbaum <yitzhak@research.att.com>             #
+#                                                                      #
+########################################################################
+######################################################################
+# PADS                    IDL name      PADS/C   Custom   Additional
+# type                                  rep type code     parameters
+######################################################################
+Pfloat32                  float         -        -        -                                    
+Pfloat64                  float         -        -        -                                  
+Pchar			  char		-        -        -        
+Puint8                    int           -        -        -                           
+Puint16                   int           -        -        -                           
+Puint32                   int           -        -        -                           
+Pint8                     int           -        -        -                           
+Pint16                    int           -        -        -                           
+Pint32                    int           -        -        -                                   
+Pint64                    int           -        -        -                           
+Puint8_FW                 int           Puint8   -        [in] size_t width  
+Puint16_FW                int           Puint16  -        [in] size_t width 
+Puint32_FW                int           Puint32  -        [in] size_t width 
+Pint8_FW                  int           Pint8    -        [in] size_t width  
+Pint16_FW                 int           Pint16   -        [in] size_t width  
+Pint32_FW                 int           Pint32   -        [in] size_t width  
+Pint64_FW                 int           Pint64   -        [in] size_t width  
+Pb_int8			  int		Pint8  - 	  -
+Pb_int16		  int		Pint16 - 	  -
+Pb_int32		  int		Pint32 - 	  -
+Pb_int64		  int		Pint64 - 	  -
+Pb_uint8		  int		Puint8 - 	  -
+Pb_uint16		  int		Puint16  - 	  -
+Pb_uint32		  int		Puint32  - 	  -
+Pstring                   string        Pstring  Pstring_init(pads,res_out);_res=Pstring_read(pads,m,pd,res_out,stopChar);        [in] char   stopChar   
+Pstring_FW                string        Pstring  Pstring_init(pads,res_out);_res=Pstring_FW_read(pads,m,pd,res_out,width);        [in] size_t width
+Pstring_ME                string        Pstring  Pstring_init(pads,res_out);_res=Pstring_ME_read(pads,m,pd,res_out,matchRegexp);  [in,string] const char *matchRegexp      
+Pstring_SE                string        Pstring  Pstring_init(pads,res_out);_res=Pstring_SE_read(pads,m,pd,res_out,stopRegexp);   [in,string] const char *stopRegexp      
+Pstring_CME               string        Pstring  Pstring_init(pads,res_out);_res=Pstring_CME_read(pads,m,pd,res_out,matchRegexp); [in,ptr] Pregexp_t *matchRegexp      
+Pstring_CSE               string        Pstring  Pstring_init(pads,res_out);_res=Pstring_CSE_read(pads,m,pd,res_out,stopRegexp);  [in,ptr] Pregexp_t *stopRegexp      
+#Psbh_ip			  ip		Puint32  - 	  -
+#Pb_timestamp		  timestamp	Puint32  -	  -
+Ptimestamp_explicit_FW    timestamp     Puint32  -        [in] size_t width, [in,string] const char *format,[in,unique] Tm_zone_t *tzone

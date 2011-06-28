@@ -1,0 +1,75 @@
+Debug output:
+
+[
+   {
+      (
+         {2}
+          | 
+         <-882746925 Some>
+          | 
+         < None>
+          | 5001 | 
+         {
+            (dns1 | abc.com)
+            }
+          | 
+         {
+            (dns2 | xyz.com)
+            }
+          | 
+         <
+            [
+               (c | slow link)
+               ;
+               (w | lost packets)
+               ]
+             Generic>
+          | 
+         < INTERNATIONAL>
+         )
+      }
+   ;
+   {
+      (
+         {3}
+          | 
+         < None>
+          | 
+         <-882745237 Some>
+          | 5074 | 
+         {
+            (dns1 | bob.com)
+            }
+          | 
+         {
+            (dns2 | alice.com)
+            }
+          | 
+         <
+            (
+               {
+                  (src_addr | 192.168.0.10)
+                  }
+                | 
+               {
+                  (dst_addr | 192.168.23.10)
+                  }
+                | 
+               {
+                  (start_time | -882745025)
+                  }
+                | 
+               {
+                  (end_time | -882744954)
+                  }
+                | 
+               {
+                  (cycle_time | 17412)
+                  }
+               )
+             Details>
+          | 
+         < SPECIAL>
+         )
+      }
+   ]

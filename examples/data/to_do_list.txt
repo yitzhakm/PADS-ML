@@ -1,0 +1,115 @@
+----- General 
+
+  *- Group all built-in type/modules together into the Built_in
+     module.
+
+  x Change pads handle to include output stream.
+
+  x Add functions to open output stream.
+
+  x Implement print function for base types.
+
+  *- Implement print function for built-in types.
+
+  - Use match instead of scan when in speculative mode.
+
+  - Modify all makefiles so that dependencies are updated with every
+    make.
+
+----- Generic Tool
+   
+  *- Document S.Datatype.Empty better. Particularly the process function.
+
+  x Consider changing Record.finish to Record.process_last_field. It
+     can be important to know that the field is the last one, for
+     example, if the tool is doing something specificly *between*
+     fields. 
+
+  *- Add support for Int32 and Int64 to interface.
+
+   - Add support for types whose representation does not match their
+     output format. For example, the date/time types use int as their
+     representation, but output in a special format.
+
+   x Add module for Float.
+
+   x Add list support.
+
+   - Extend the generic tool architecture to include hooks before
+     processing as well. Currently, it is limiting to only be informed
+     after.
+
+   - Support all built-in ocaml types.
+
+   - Add extensible base type hook to generic tool interface.
+
+   x Extend debug tool to print the pd.
+
+----- Runtime
+
+   x Add Plist to Built_ins.
+
+   - Check padsc error on checkpoint related functions.
+
+  *- Change plist_pred predicate to also take length of list as arg.
+
+  *- Deal with Plist systematically, rather than the ad hoc way of
+     plist_gen. In particular, need composability.
+
+   - Add Ptransform.
+
+   x Change plist to check for eor in isDone.
+
+   x Change Built_ins interface to "include" subcomponents, rather
+     than copying from source file to built_ins.mli. Also, change all
+     list types to export module with their actual name, rather than
+     the generic Plist.
+
+   - Add makefile target to compile runtime with debugging info.
+
+   - Change source-code files to use lowercase names only. First
+     letter uppercase confuses OS X.
+
+   x Add print_pstring_lit. Check if any uses of print_str_lit
+     should really be print_pstring_lit.
+
+   - Add support for mutable records. An important feature, then,
+     would be to produce, for any type with a nested mutable field (at
+     any level of nesting), an alternate parsing function that takes a
+     rep and pd as input.
+
+   x Add support for records based on support in pads/c. In
+     particular, see macro PCGEN_FIND_EOR.
+
+   x Fix base types to set positions correctly. It seems that the
+     PADS/C invariant is that positions are set by upper level
+     functions. So, without errors, end positions are not set.
+
+   - Add warnings to Lists and elsewhere as appopriate.
+
+   x Fix list span reporting.
+
+   x Add Popt built-in.
+
+   - Document plist_gen.
+
+   - Remove Datatype.make_gen_pd permanently after checking that it is
+     really not used.
+
+   x Switch assertions and "raise Runtime_error" to use error
+      reporting mechanism, as necessary.
+
+   x Add error reporting mechanism(s).
+
+   x Change runtime to correctly compute locations, error codes, and error info.
+
+  *- Modify Record to use more efficient update_pd_hdr function for
+     literal scans. Also, set hdr.span to None to start with and
+     instead save position in generated code itself. Then, pass
+     beginning position to finish_pd_hdr.
+
+  - Change plist_gen pre and post processing functions to return
+    error codes or options.
+
+%%% END
+

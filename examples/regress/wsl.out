@@ -1,0 +1,55 @@
+warning: Error [in Pads.process_scan_result]: record 1 byte 18 : Missing string literal  [
+[record 1]207.136.97.49 - ->>><<< 15/Oct/1997:18:46:51 -0700] "GET /tk/p.txt HTTP/1.0" 700 -
+warning: Error [in Plist_dt.parse]: from record 1 byte 1 to record 2 byte 93: Array element error 
+[record 1]>>>207.136.97.49 - - 15/Oct/1997:18:46:51 -0700] "GET /tk/p.txt HTTP/1.0" 700 -
+[record 2]tj62.aol.com - - [16/Oct/1997:14:32:22 -0700] "PUT /scpt/dd@grp.org/confirm HTTP/1.0" 200 941<<<
+Debug output:
+
+nerr = 1, error_code = Nested error at record 1, characters 18 - 17, error_info = No information, span = [1:1,2:93]
+[
+   nerr = 2, error_code = Nested error at record 1, characters 18 - 17, error_info = No information, span = [1:1,1:76]
+   (
+      <
+         [207;136;97;49]
+          Ip>
+       | 
+      < Unauthorized>
+       | 
+      < Unauthorized>
+       |  15/Oct/1997:18:46:51 -0700 | 
+      (
+         < Get>
+          | /tk/p.txt | 
+         {
+            (1 | 0)
+            }
+         )
+       | 
+      nerr = 1, error_code = Sem, error_info = No information, span = [1:72,1:74]
+      {700}
+       | 
+      < Unavailable>
+      )
+   ;
+   (
+      <
+         [tj62;aol;com]
+          Host>
+       | 
+      < Unauthorized>
+       | 
+      < Unauthorized>
+       | 16/Oct/1997:14:32:22 -0700 | 
+      (
+         < Put>
+          | /scpt/dd@grp.org/confirm | 
+         {
+            (1 | 0)
+            }
+         )
+       | 
+      {200}
+       | 
+      <941 Len>
+      )
+   ]

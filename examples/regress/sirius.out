@@ -1,0 +1,102 @@
+warning: Error [in Pads.process_scan_result]: record 5 byte 68 : Extra data before character literal |
+[record 5]2711797|2228733|1|9153689364|9153689364|4323689364|4323689364|79762>>>t|<<<4512197922101|2|0|1614540|LOCAL|CUST_DUE_DATE|1004504399
+Error [in Plist_gen.parse]: at record 2 just before byte 1: Array seperator error
+Debug output:
+
+nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info = No information, span = [1:1,5:125]
+(
+   (1005022800)
+    | 
+   nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info = No information, span = [2:1,5:125]
+   [
+      (
+         (9068931 | 9068931 | 1 | 
+            <0 Some>
+             | 
+            <0 Some>
+             | 
+            <0 Some>
+             | 
+            <0 Some>
+             | 
+            < None>
+             | 
+            <
+               (68931)
+                GenRamp>
+             | EDTF_6 | 0 | BREKDAVI | UNO)
+          | 
+         [
+            (EDTF_CRTE | 969940800)
+            ]
+         )
+      ;
+      (
+         (2711798 | 2228734 | 1 | 
+            <-1010071740 Some>
+             | 
+            <-1010071740 Some>
+             | 
+            <-1010071740 Some>
+             | 
+            <-1010071740 Some>
+             | 
+            <
+               <75407 Small_zip>
+                Some>
+             | 
+            <674355321 Ramp>
+             | 2 | 0 | 250912 | LOCAL)
+          | 
+         [
+            (CUST_DUE_DATE | 1004417999)
+            ]
+         )
+      ;
+      (
+         (2711797 | 2228733 | 1 | 
+            <563754772 Some>
+             | 
+            <563754772 Some>
+             | 
+            <28722068 Some>
+             | 
+            <28722068 Some>
+             | 
+            <
+               <79762 Small_zip>
+                Some>
+             | 
+            <334777653 Ramp>
+             | 2 | 0 | 1614540 | LOCAL)
+          | 
+         [
+            (CUST_DUE_DATE | 1004504399)
+            ]
+         )
+      ;
+      nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info = No information, span = [5:1,5:125]
+      (
+         nerr = 1, error_code = Nested error at record 5, characters 68 - 69, error_info = No information, span = [5:1,5:101]
+         (2711797 | 2228733 | 1 | 
+            <563754772 Some>
+             | 
+            <563754772 Some>
+             | 
+            <28722068 Some>
+             | 
+            <28722068 Some>
+             | 
+            <
+               <79762 Small_zip>
+                Some>
+             | 
+            <334777653 Ramp>
+             | 2 | 0 | 1614540 | LOCAL)
+          | 
+         [
+            (CUST_DUE_DATE | 1004504399)
+            ]
+         )
+      ]
+   )

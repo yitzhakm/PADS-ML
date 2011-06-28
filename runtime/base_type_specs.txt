@@ -1,0 +1,64 @@
+########################################################################
+#                                                                      #
+#             This software is part of the padsml package              #
+#           Copyright (c) 2006-2011 AT&T Knowledge Ventures            #
+#                      and is licensed under the                       #
+#                        Common Public License                         #
+#                      by AT&T Knowledge Ventures                      #
+#                                                                      #
+#                A copy of the License is available at                 #
+#                    www.padsproj.org/License.html                     #
+#                                                                      #
+#  This program contains certain software code or other information    #
+#  ("AT&T Software") proprietary to AT&T Corp. ("AT&T").  The AT&T     #
+#  Software is provided to you "AS IS". YOU ASSUME TOTAL RESPONSIBILITY#
+#  AND RISK FOR USE OF THE AT&T SOFTWARE. AT&T DOES NOT MAKE, AND      #
+#  EXPRESSLY DISCLAIMS, ANY EXPRESS OR IMPLIED WARRANTIES OF ANY KIND  #
+#  WHATSOEVER, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF#
+#  MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, WARRANTIES OF  #
+#  TITLE OR NON-INFRINGEMENT.  (c) AT&T Corp.  All rights              #
+#  reserved.  AT&T is a registered trademark of AT&T Corp.             #
+#                                                                      #
+#                   Network Services Research Center                   #
+#                          AT&T Labs Research                          #
+#                           Florham Park NJ                            #
+#                                                                      #
+#            Yitzhak Mandelbaum <yitzhak@research.att.com>             #
+#                                                                      #
+########################################################################
+# Pads type               IDL module   rep    default value   Gen. tool       Gen            Gen. tool  Optional additional
+#                                                             conversion      producer       module     parameters
+#                                                             function        conv. fun.
+pstring                  Pstring_c    string  '"DEFAULT"'     X               X              String     [stop_char char]
+pstring_FW               Pstring_c    string  '"DEFAULT"'     X               X              String     [width int]
+pstring_SE               Pstring_c    string  '"DEFAULT"'     X               X              String     [stop_expr string]
+pstring_ME               Pstring_c    string  '"DEFAULT"'     X               X              String     [match_expr string]
+pstring_CSE              Pstring_c    string  '"DEFAULT"'     X               X              String     [stop_expr Pads.reg_exp]
+pstring_CME              Pstring_c    string  '"DEFAULT"'     X               X              String     [match_expr Pads.reg_exp]
+pchar                    Pchar_c      char    "'A'"           X               X              Char
+pfloat32                 Pfloat_c     float   0.0             X               X              Float
+pfloat64                 Pfloat_c     float   0.0             X               X              Float
+puint8                   Pint_c       int     0               X               X              Int
+puint16                  Pint_c       int     0               X               X              Int
+puint32                  Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int
+pint8                    Pint_c       int     0               X               X              Int
+pint16                   Pint_c       int     0               X               X              Int
+pint32                   Pint_c       int32   Int32.zero      Int32.to_int    Int32.of_int   Int
+pint64                   Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int
+puint8_FW                Pint_c       int     0               X               X              Int        [width int]
+puint16_FW               Pint_c       int     0               X               X              Int        [width int]
+puint32_FW               Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int        [width int]
+pint8_FW                 Pint_c       int     0               X               X              Int        [width int]
+pint16_FW                Pint_c       int     0               X               X              Int        [width int]
+pint32_FW                Pint_c       int32   Int32.zero      Int32.to_int    Int32.of_int   Int        [width int]
+pint64_FW                Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int        [width int]
+pb_int8                  Pint_c       int     0               X               X              Int  
+pb_int16                 Pint_c       int     0               X               X              Int  
+pb_int32                 Pint_c       int32   Int32.zero      Int32.to_int    Int32.of_int   Int               
+pb_int64                 Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int               
+pb_uint8                 Pint_c       int     0               X               X              Int  
+pb_uint16                Pint_c       int     0               X               X              Int  
+pb_uint32                Pint_c       int64   Int64.zero      Int64.to_int    Int64.of_int   Int  
+ptimestamp_explicit_FW   Ptimestamp_c int64   Int64.zero      Int64.to_int    Int64.of_int   Int        [width int, format string, tzone "Pads.timezone option"]
+#psbh_ip			 Pip_c 	int64  Int64.zero       Int64.to_int  Int64.of_int   Int
+#pb_timestamp		 Ptimestamp_c int64  Int64.zero       Int64.to_int   Int64.of_int   Int

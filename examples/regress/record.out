@@ -1,0 +1,11 @@
+Debug output:
+
+(
+   (hello | 
+      {hello}
+       | A | 7)
+    | 
+   (hello | 
+      {hello}
+       | 6 | 8)
+   )

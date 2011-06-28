@@ -1,0 +1,522 @@
+May 2010
+- Removed 'pml' from targets of top-level makefile b/c of compilation problems.
+- Added 'clean' target to top-level makefile
+- Disentangled simpleAst.ml from Common.ml. Split off new module simpleAstTx.ml to solve the
+  false sharing problem wherein ocamldep would create circular dependencies between Common.ml and  
+  simpleAst.ml.
+- Modified makefile in compilers subdirectory to invoke camlp5 in transitional mode. I  don't know 
+  if this works when camlp5 has been installed in strict mode because I couldn't find any documentation
+  of the -mode flag. But, at least it doesn't seem to hurt.
+
+February 2009
+- Upgraded PADS/ML to be compatabile with ocaml 3.10 + camlp5.
+
+Week of July 8 2007
+
+- Changed record parsing to allow ';' on last record field.
+
+- In SLazyTraversalGenerator, process empty tuples with punit.
+ 
+- Added support for datatype branches with no type specified as
+  abbreviation for "of omit punit".
+
+Week of June 24
+
+- Split off tools and tool driver (formerly tester) into a separate
+  library -- libtools.
+
+- Began adding makefile support for profiling.
+
+Week of June 17
+
+- Added make support for padsml interpreter. Interpreter "pml" is now
+  installed in the padmsl/bin directory. It is run as 
+
+    pml -I <padsml-home>/arch/<your-arch>/lib
+
+- Added template for project makefile. This should make it easier for
+  users to start a new project involving pads/ml. Won't need to embed
+  the project in existing directories and makefile.  The makefile
+  dev/tests/learn_ciscoIOS.mk is an instance of the template.  Also
+  added file projects_common.mk that includes most of the details that
+  will be common to all project makefiles.
+
+- Split off common_vars.mk from common.mk.
+  
+- Added other pml compiler scripts. Added support in all scripts for
+  cmd-line options.
+
+Week of June 10
+
+- Added transformation to compiler that transforms a pads/ml AST into
+  a simple-type ast. The simpler ast can then be used by other
+  generators.
+
+- Refactored type generator phase to use simpleAst transformation. 
+
+ ...
+
+- Added flatten and inject-into-universal-datatype tool.
+
+- Cleaned up makefiles in runtime and padsc_interface so that make
+  cannot infinite-loop while generating base-type files.
+
+- Moved a lot of the functionality of tester.ml into module PadsEasy,
+  which is packaged as part of the runtime.  
+
+- Added pstream
+
+Week of March 19.
+
+- Added support for type aliasing -- specifying a specific
+  (host-language) type for a given a pads type. The type alias
+  must be compatible with the type definition. The key use of this is
+  when multiple pads types want to share the same generative type.
+  Use "==" to specify alias. Note that aliases for poly types *do not*
+  need to (re) specify type params. They are filled in automatically
+  by the compiler.
+
+- Cleaned up Ast for top level decls and changed all corresponding code.
+
+Week of March 11.
+
+- Added "peol" literal that eats newlines but is still absorbed/printed
+  like other literals.
+
+Week of March 5.
+
+- Compiler/Language: Allow declaration of types defined in other modules using "pextern"
+
+- Compiler/Language: Removed cptype non-terminal and folded it into
+  ptype. literals are now parsed first-class, but still second class
+  in the Ast as they lack their own constructor.
+
+- BUG fix: lists check for EOR and EOF when they should only be
+  checking for EOF. The reason is that there is no reason to
+  assume that lists can't span records. In pads/c, arrays only
+  check for eor if they are explicitly marked as being records,
+  which can't be done in pads/ml.
+   
+
+Week of Feb 26.
+
+- Changed Pads.Log.report... to take an optional (string option)
+  message argument corresponding to the PDCI_report_err which takes an
+  optional string argument (it interprets NULL as None).  Changed
+  runtime and PrinterGenerator code that used Pads.Log to properly
+  wrap args. Also changed some uses to pass None instead of a string
+  as the default string printed for the particular error code was
+  appropriate.
+
+- Brought Pads modules's implementation of pos and span more in line
+  with the PADS/C version. Correspondingly, made definition of these
+  types abstract in pads.mli.
+
+Week of Feb 19.
+
+- Stop generating module signatures. The problem is that it would
+  require that we infer when a type argument has base type and when it
+  has a value parameter, so that we can reflect that in the
+  signature. If we drop the signature, then the normal ocaml inference
+  does this for us. So, out of laziness, I've dropped the signature.
+
+- Export base-type types in the same way that other types are
+  exported (i.e. directly by their name, not Mod.rep ...)
+
+- Changed printing functions so that they specify type of pd
+  argument's header, even though they don't use it. Necessary to avoid
+  ocaml error "The type of this expression, t, contains type variables
+  that cannot be generalized" in compiling the print functions of type
+  applications. The problem was that print functions don't use the
+  header so it was given polymorphic type, but then type application
+  uses partial application (i.e. print = foo bar, rather than print
+  rep pd pads = foo bar rep pd pads), so the result was that the pd
+  header had an ungeneralizable type.
+
+- Changed generated base types to have lower case names.
+
+- Changed syntax so that type names are lowercase. For now, just
+  capitalized them in parser (padsML_pp.ml) as syntactic sugar. But,
+  for long-term, the phase code should manipulate lower-case names
+  directly (even if through Common module).
+
+- Merged pdatatype and ptype declarations into one.
+
+- Add let field, which allows for temp values. just like PADS/C
+  pomit pcompute.
+
+- Added support for type annotations so that any expression can be
+  used where only literals are allowed now.
+
+- Added support for Pnosep to plist_dt.
+
+- Defunctorized type representations completely. All artifacts
+  produced from poly types are now individually parameterized.
+  MORE HERE.
+
+- Added full support for arbitrarily nested types.
+
+- Added pIP module.
+
+- Improved support for plist_dt, including No_sep and No_term options.
+
+- Introduced poption. Deprecated popt in favor of poption.
+
+- Refactor all plist_gen... code.
+
+- Added "Extensions" base type to generic tool interface to support
+  future base types that extend the core set. Currently includes only pIP.
+
+Earlier ...
+
+- Added ptransform.
+
+- Added check for mismatched rep and pd (for datatypes) to traversals.
+  This change eliminates the incomplete pattern matches in the traverse
+  function. Added wildcard pattern that logs an error.
+
+- Added new logging module Pads.Log. Called NoHandle - does not require
+  pads handle and simply prints to standard out.
+
+- Added pstring_lit type.
+
+TAG: Release 0.1.
+
+1/23/2007:
+
+- Bugfix: type abbreviations did not produce type
+  declarations. Modified Compiler.ml to fix this.
+
+- Added plist_dt type to support "universal" list type. Currently,
+  uses datatypes to specify types of sep and term rather than
+  hard-coding them. Internally, it first deconstructs the datatype and
+  then runs the loop code, for efficiency.
+
+- Changed printer generator to work around camlp4 pretty printing
+  bug. Pretty-printed printer code now adheres to standard OCaml syntax.
+
+- Eliminated the incomplete pattern matches in the print
+  function. Added wildcard pattern that logs an error.
+
+Earlier:
+
+- Added Ptry.
+
+- Converted Traversal functor to a function and Tool interface to a
+  simple record type. While not quite as pretty, allows us to
+  circumvent rec. module restriction of not allowing functors.
+
+- Changed Record.finish to Record.process_last_field. It can be
+  important to know that the field is the last one, for example, if
+  the tool is doing something specificly *between* fields.
+
+- Change test programs to take cmd-line arguments.
+
+- Add top level makefile that supports make all, make install and
+     make veryclean, which all act recursively.
+
+2/19/2006
+Brief:
+
+- Changed computed values to have pd's corresponding to their reps.
+
+- Added support to generate pd's for a given type based on a rep. 
+
+- Added support for generic tool creation and two sample tools:
+
+- Assorted makefile changes, including nascent support for regression
+  testing.
+
+- Bugfixes.
+
+- Changed base types to supply default values on parse failure.
+
+- Added a todo file: TODO.txt.
+
+
+Details:
+
+Computer types, their pds, and the gen_pd function:
+  Originally, all computed values had a base pd. This approach was
+  found to be insufficient. We have changed the design so that all
+  computed values have pds corresponding to their pads/ml type.
+
+  The key to supporting this approach is the addition of the gen_pd
+  function to all types. This function takes a represntation and
+  generates the corresponding parse descriptor. It both constructs the
+  pd and checks all semantics constraints over the rep. Therefore, the
+  construction is non-trivial as their is actual error calculations
+  that must be performed.
+
+  Three major changes were necessary to support this function. 1. I added
+  another phase to the compiler to generate the gen_pd function for
+  new descriptions. 2. Each base type was given a gen_pd
+  function. 3. The "Type" interface was changed to include a
+  specification for a gen_pd type.
+
+Generic tool support:
+  Each type now exports a "Traverse" functor to support application of
+  generic tools to values of that type.  The functor takes a generic
+  tool and returns a structure with two functions: one to initialize
+  the type-specific state for the tool; and two, to traverse the rep
+  and pd in tandem in order to update the state.
+
+  Once again, this necessitated adding a new phase to the compiler,
+  adding a Traverse functor to all base types and modifying the Type
+  interface accordingly.
+
+  In addition, Artem and I have fleshed out and added the interface to
+  be satisfied by generic tools and created two basic tools: a simple
+  debug tool and a simple accumulator tool.
+
+  We have added the directory tools in examples to keep all the
+  example tools.
+
+Makefiles:
+  I added a makefile to the examples/pml directory so that
+  descriptions in that directory can be built using make in that
+  directory, rather than from the examples/tests directory. In
+  addition, "make all" in examples/pml provides a basic regression test,
+  in that it tests that the code can be compiled by the PADS/ML
+  compiler and that the generated code is valid ocaml code. However,
+  it does not run any code.
+
+  Separately, we modified the padsidl makefile so that it can compile
+  correctly even if the camlidl libs are located separately from the
+  rest of the ocaml installation.
+
+  Changed .pml compilation so that we specify the name of the "loc"
+  variable to be "loc." This change was necessary for newer versions
+  of ocaml, in which camlp4 changed to use "_loc" as the default name
+  for location variables.
+
+Bugfixes: assorted, mostly on the newly generated code.
+
+Default values:
+  All base types now export a value "default" containing the default
+  value for that type. Also, that value is used if the base type
+  encounters an error during parsing.
+
+2/10/2006
+- Added check for non-uniform recursion in definition of recursive datatypes.
+
+2/9/2006
+Brief:
+Improved support for type-type instantiations. Modified AST. Extended
+functionality of in-placed datatype default variant. Made
+changes/fixes to constrained-types implementation. Added Sirius
+(dibbler) example. Assorted syntax changes. Added new base types.
+
+Details:
+
+- Added first-class type-type instatiation. The instantiation can be
+  nested as well.
+
+- Modified value-type instantiation so that type-instatiated types can
+  then be further instantiated with a value. e.g. Bar Plist(x).
+
+- Modified Ast and compiler phases so that type identifiers, type-type
+  instantiation and type-value instantiation are now encoded
+  individually. Previously, they were all packed into one Ast constructor.
+
+- Modified in-place datatype defaults to support normal types, in
+  addition to the existing support for computed values.
+
+- Constrained types: modified code generation and corresponding
+  error-handling function in Pads module so that most of the work is
+  now done in the Pads module instead of in the generated code.
+
+- Fixed bug in constrained-type error-handling functions. The function
+  would always throw an exception in parsing was speculative. Fixed to
+  check for an error first.
+
+- Added first draft of sirius (dibbler) example.
+
+- Changed syntax of omit from "omit_of" to "of omit" to be consistent.
+
+- Changed syntax of computed fields to carry the type. This change was
+  made for in-place datatypes (i.e. the default variant), switched
+  datatypes and records.
+
+- Added Pchar, Pstring, Pstring_FW, Pstring_ME and Pstring_SE base types.
+
+2/5/2006
+Brief:
+Added switched-datatypes. Improved in-place datatypes to support
+default cases and absorbed literals. Added support for writing 
+simpler test programs.
+
+Details:
+Switched datatypes:
+  Added full support for switched datatypes. Includes support for
+  absorbed literals/types and computed values. A default value is supported
+  implicitly by using the wildcard pattern.
+  Changes include syntax, type generation, parser generation and
+  runtime support.
+  Added example "match_dt.pml", driver program "test_match_dt.ml", and
+  sample data file "match_dt.txt".
+
+In-place datatypes:
+  Completed implementation of in-place datatypes. Now support default
+  case and absorbed literals and types. 
+  Changes include syntax, type generation, parser generation and
+  runtime support. Modified "datatype_implicit" description and
+  corresponding driver and data files.
+
+Tester:
+  Added a module "Tester" to support easy creation of new driver
+  programs. Provides simplified interface to runtime system with
+  single call taking a parsing function to be run. See tester.mli for
+  more details. It is used in both datatype driver programs. In the
+  future, all driver programs should use it.
+
+Pint:
+  Modified to raise exception in case of error during speculative parse.
+
+Arrays:
+  Added syntactic support for arrays and sample description.
+
+1/31/2006:
+Imported PADS/C runtime and Pint type.Modified assorted makefiles
+(including common.mk) to correctly handle the pads.cma library.
+
+Improved recursive datatype support so that speculative
+parsing is based on try-with. Also, tested to make sure that it works
+based on pads/c runtime.
+
+Changed record/tuple generated code so that pd hdr is constructed
+incrementally rather than by applying a make_pd_hdr function to all of
+the sub-pds once we've parsed all of the subcomponents.
+
+Updated a number of the test programs to use the new (real) pads
+interface.
+
+Added intlist example separate from datatype_implicit example.
+
+Added new top-level declaration "papp" to syntax to support type-instantiation.
+
+1/24/2006:
+Changed compiler so that compiler phases process type definitions instead of type
+declarations. 
+
+AST: modified to reflect distinction between top-level type
+declarations and nested types. In particular, instantiating a type can
+no longer be nested.
+
+Added:
+  1) Recursive datatypes (implicit)
+  2) Polymorphism. 
+
+11/29/2005:
+
+In compiler: assorted fixes. Changed Where code generation to work
+correctly.
+In runtime: added support in Pads module for Where types.
+
+In examples: created three new examples: record, typedef and where,
+with corresponding test programs, data and pml files. Improved the
+makefile in examples/tests to support all tests and also added target
+for compiling generated ml files so as it to make it easier to find
+compilation bugs in generated code (gives you locations in the .ml
+file rather than the .pml file).
+
+In examples:
+
+11/16/2005:
+
+Syntax: Tuples no longer need parens, computed fields do not need the
+"Pcompute" keyword, parentheses can be used for grouping types,
+non-literal absorb expressions are delineated with colons (eg. :x+5:),
+computed expressions need no delineation (that is, the expr no longer
+eats the ; so we don't need to surround it with delineators).
+
+Masks: masks have been totally removed from the system.
+
+Tuples: Tuples are now working fully. Moreover, the tuple
+parser-generation code has been unified with the record p.g. code.
+
+Error-recovery: Both tuples and records now wrap all parsing of
+subcomponents in error recovery calls from the pads library. These
+functions are currently just dummies.
+
+11/3/2005:
+
+Restructured directories, added new features, set up systematic
+compilation management. 
+
+1. Directory structure.
+
+I've moved all of the padsml compiler sources into their own
+directory. Additionally, I've added a working (albeit small) runtime
+system, and a useable examples directory.
+
+The main directory is still padsml. Below is a listing of each
+directory within padsml and a brief description of each:
+
+  compiler - source files for padsml compiler.
+  runtime  - source files for padsml runtime. These are the modules
+    referenced by generated code.
+  examples - 
+     pml - padsml descriptions
+     gen - empty directory for generated code
+     data - sample data sets for descriptions
+     tests - simple tests for descriptions
+  lib - interface and library files for use in compiling
+    examples. Built from compiler and runtime files.
+  mk - assorted utility make files.
+  scratch - scratch space for testing and distributing ideas.
+
+2. Compilation management
+
+I set up makefiles for all the relevant directories, factoring common
+portions into makefiles in the mk directory. The basic idea follows
+PADS/C.  Each directory with source files has a hidden directory
+.build into which compiled files are placed. Shared libraries and
+interfaces are installed in the lib directory as well. Running make
+from the root directory causes all the relevant subdirectories to be
+made, installing the necessary files in lib.
+
+3. Features
+
+Roughly speaking, we can break the features down into the following:
+parsing, type checking, type generation, parser generation, code
+compilation, code execution.
+
+Parsing: we support nullary type application, tuples, records and
+  constrained types. Note that we fully support records, including
+  generated fields, literals, and absorbed types.
+
+Type checking: unchanged.
+
+Type generation: Same types as above. Records now correctly generated
+  with unique fields names for rep, pd, and mask types. Also, records
+  never nested anonymously to conform to ocaml rules.
+
+Parser generation: See Type generation. Also, literal absorb now
+  implemented correctly through basic type inference on
+  literals. General expressions are not yet supported.
+
+Code compilation: i.e. the generated code actually compiles. Pint and
+  Record types have been tested.
+
+Code execution. Pint and record types have been tested and they
+  successfully execute.
+
+10/20/2005:
+
+1. Eliminated notion of base types from compiler. Base types are now
+   only pre-loaded standard types.
+
+2. Modified output format of compiler. Each type declaration now
+   yields its own module. 
+
+3. Added type checking phase to compiler. Basically a dummy at this
+   point. Merely checks that description names are not
+   duplicated. However, also adds entry for each description to the
+   compiler.
+
+4. Began implementation of tuple types. Currently generate rep,pd, and
+   mask types, but not parser. Also, support for expressions is only a
+   placeholder.
+
+Note on names. A description is a named PML type.

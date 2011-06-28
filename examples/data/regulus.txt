@@ -1,0 +1,2 @@
+2:03:45:23||5001|dns1=abc.com;dns2=xyz.com|c=slow link;w=lost packets|INTERNATIONAL
+3:|04:13:31|5074|dns1=bob.com;dns2=alice.com|src_addr=192.168.0.10;dst_addr=192.168.23.10;start_time=04:17:03;end_time=04:18:14;cycle_time=17412|SPECIAL

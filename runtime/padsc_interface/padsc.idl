@@ -1,0 +1,523 @@
+/***********************************************************************
+*                                                                      *
+*             This software is part of the padsml package              *
+*           Copyright (c) 2006-2011 AT&T Knowledge Ventures            *
+*                      and is licensed under the                       *
+*                        Common Public License                         *
+*                      by AT&T Knowledge Ventures                      *
+*                                                                      *
+*                A copy of the License is available at                 *
+*                    www.padsproj.org/License.html                     *
+*                                                                      *
+*  This program contains certain software code or other information    *
+*  ("AT&T Software") proprietary to AT&T Corp. ("AT&T").  The AT&T     *
+*  Software is provided to you "AS IS". YOU ASSUME TOTAL RESPONSIBILITY*
+*  AND RISK FOR USE OF THE AT&T SOFTWARE. AT&T DOES NOT MAKE, AND      *
+*  EXPRESSLY DISCLAIMS, ANY EXPRESS OR IMPLIED WARRANTIES OF ANY KIND  *
+*  WHATSOEVER, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF*
+*  MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, WARRANTIES OF  *
+*  TITLE OR NON-INFRINGEMENT.  (c) AT&T Corp.  All rights              *
+*  reserved.  AT&T is a registered trademark of AT&T Corp.             *
+*                                                                      *
+*                   Network Services Research Center                   *
+*                          AT&T Labs Research                          *
+*                           Florham Park NJ                            *
+*                                                                      *
+*            Yitzhak Mandelbaum <yitzhak@research.att.com>             *
+*                                                                      *
+***********************************************************************/
+/* Less than ideal definition of size_t. 
+   Need to find out what the correct definition of size_t is.
+*/
+typedef long size_t;
+
+typedef enum Perror_t_e {
+  P_OK                            =    0,
+  P_ERR                           =   -1
+} Perror_t;
+
+typedef enum PerrCode_t_e {
+  /* First set of errors have no corresponding location  */
+  P_NOT_PARSED                    =    0,
+  P_NO_ERR                        =    1,
+  P_SKIPPED                       =    2,
+
+  P_UNEXPECTED_ERR                =    3,
+
+  P_BAD_PARAM                     =    4,
+  P_SYS_ERR                       =    5,
+  P_IO_ERR                        =    6,
+
+  P_CHKPOINT_ERR                  =   11,
+  P_COMMIT_ERR                    =   12,
+  P_RESTORE_ERR                   =   13,
+  P_ALLOC_ERR                     =   14,
+  P_FORWARD_ERR                   =   15,
+  P_PANIC_SKIPPED                 =   20,
+
+  P_FMT_EMPTY_DELIM_ERR           =   30,
+
+  P_INVALID_FUNCTION_CALL         =   50,
+
+  /* A general error relating to smart nodes*/
+  P_SMART_NODE_ERR                =   60,
+
+  /*
+   * A general error that requires that an ocaml
+   * ocaml exception be thrown.
+   */
+  P_FAILWITH_ERR                  =   61,
+
+  /* The following errors (code >= 100) DO have a corresponding location  */
+  P_USER_CONSTRAINT_VIOLATION     =  100,
+  P_MISSING_LITERAL               =  101,
+  P_ARRAY_ELEM_ERR                =  110,
+  P_ARRAY_SEP_ERR                 =  111,
+  P_ARRAY_TERM_ERR                =  112,
+  P_ARRAY_SIZE_ERR                =  113,
+  P_ARRAY_SEP_TERM_SAME_ERR       =  114,
+  P_ARRAY_USER_CONSTRAINT_ERR     =  115,
+  P_ARRAY_MIN_BIGGER_THAN_MAX_ERR =  116,
+  P_ARRAY_MIN_NEGATIVE            =  117,
+  P_ARRAY_MAX_NEGATIVE            =  118,
+  P_ARRAY_EXTRA_BEFORE_SEP        =  119,
+  P_ARRAY_EXTRA_BEFORE_TERM       =  120,
+
+  P_STRUCT_FIELD_ERR              =  125,
+  P_STRUCT_EXTRA_BEFORE_SEP       =  126,
+  P_UNION_MATCH_ERR               =  130,
+  P_OPTION_MATCH_ERR              =  130,
+  P_ENUM_MATCH_ERR                =  140,
+  P_TYPEDEF_CONSTRAINT_ERR        =  150,
+  P_RECUR_VAL_ERR                 =  155,
+
+  P_AT_EOF                        =  160,
+  P_AT_EOR                        =  161,
+  P_EXTRA_BEFORE_EOR              =  162,
+  P_EOF_BEFORE_EOR                =  163,
+  P_COUNT_MAX_LIMIT               =  164,
+  P_RANGE                         =  170,
+
+  P_INVALID_A_NUM                 =  180,
+  P_INVALID_E_NUM                 =  181,
+  P_INVALID_EBC_NUM               =  182,
+  P_INVALID_BCD_NUM               =  183,
+
+  P_INVALID_CHARSET               =  190,
+  P_INVALID_WIDTH                 =  191,
+
+  P_CHAR_LIT_NOT_FOUND            =  200,
+  P_STR_LIT_NOT_FOUND             =  210,
+  P_REGEXP_NOT_FOUND              =  220,
+  P_INVALID_REGEXP                =  230,
+  P_WIDTH_NOT_AVAILABLE           =  240,
+  P_INVALID_TIMESTAMP             =  250,
+  P_INVALID_DATE                  =  251,
+  P_INVALID_TIME                  =  252,
+  P_INVALID_IP                    =  260,
+  P_INVALID_IP_RANGE              =  261,
+} PerrCode_t;
+
+/* ================================================================================
+ * BASIC LIBRARY TYPES
+ */
+
+typedef enum PerrorRep_e { PerrorRep_None, PerrorRep_Min, PerrorRep_Med, PerrorRep_Max } PerrorRep;
+
+/* Abstract definition for P_t and other types. Ensures that the file typechecks. 
+   We don't need to specify the actual foo_s.
+*/
+typedef [abstract] struct P_s         P_t;
+typedef [abstract] struct Pdisc_s     Pdisc_t;
+typedef [abstract] struct Pio_disc_s  Pio_disc_t;
+typedef [abstract] struct Tm_zone_s   Tm_zone_t;
+typedef [abstract] struct Pregexp_s   Pregexp_t;
+/* As C types are ignored, we just place void here. */
+typedef [abstract] void *SfioPtr;
+typedef [abstract] void *RBufPtr;
+
+/* The following is no longer used: */
+/* Hook to hand-implemented function for converting a pstring to an ocaml string. */
+/* quote(mlmli,"external string_of_pstring : pstring -> string = \"Pstring2caml_string\"") */
+
+typedef unsigned int   Pbyte;
+
+typedef         signed int     Pint8;
+typedef         signed int     Pint16;
+typedef [int32] signed int     Pint32; 
+typedef [int64] signed int     Pint64; 
+
+typedef unsigned int   Puint8;
+typedef unsigned int   Puint16;
+typedef [int64] unsigned int   Puint32; 
+/*typedef unsigned int   Puint64; */
+
+typedef float     Pfloat32; 
+typedef float     Pfloat64; 
+
+typedef unsigned char Pchar;
+
+typedef struct Pbase_pd_s Pbase_pd;
+typedef [int32] unsigned int Pbase_m;
+typedef struct Ppos_s           Ppos_t;
+typedef struct Ploc_s           Ploc_t;
+typedef [int64] int Sfoff_t;
+typedef long ssize_t;
+typedef Pint32 Pflags_t;
+
+/**
+      
+Current design for Pstrings is to copy them from C to ocaml strings,
+but then to pass them by reference back to C. 
+
+Should we add support for not copying Pstrings into ocaml strings?
+Perhaps some sort of opaque string? The problem is that ocaml
+memory management and pads memory management are fundamentally
+different. So, its dangerous to mix the two. For example, Pstrings are
+allocated from a buffer that is associated with a pads
+handle. However, this means that when the pads handle is closed, the
+memory is de-allocated. This feature is rather limiting as it requires
+that we only use the memory within the bounds of the open and close,
+which is fundamentally at odds with garbage collection.
+
+The standard situation will be that copy_strings will be set to false
+in the discipline and, instead, pads/ml will copy all pstrings into
+ocaml. Conversely, in order to use functions that deal with Pstrings,
+we will 1) mark them as sharing and 2) ensure that they are not
+stored, so that ocaml GC can't free them incorrectly.
+
+**/
+quote(c,"CAMLprim void padsml_ml2c_padsc_Pstring(value _v1, Pstring * _c2)");
+quote(c,"{");
+quote(c,"  CAMLparam1(_v1);");
+quote(c,"  (*_c2).len = string_length(_v1);");
+quote(c,"  (*_c2).str = String_val(_v1);");
+quote(c,"  (*_c2).sharing = 1;");
+quote(c,"  CAMLreturn0;");
+quote(c,"}");
+
+quote(c,"CAMLprim value padsml_c2ml_padsc_Pstring(Pstring * ps)");
+quote(c,"{");
+quote(c,"  CAMLparam0 ();");
+quote(c,"  CAMLlocal1(caml_string);");
+quote(c,"  char *str;");
+quote(c,"");
+quote(c,"  caml_string = caml_alloc_string(ps->len);");
+quote(c,"  str = String_val(caml_string);");
+quote(c,"  memcpy(str, ps->str, ps->len);");
+quote(c,"  CAMLreturn(caml_string);");
+quote(c,"}");
+
+typedef [string,c2ml(padsml_c2ml_padsc_Pstring),ml2c(padsml_ml2c_padsc_Pstring)] char *Pstring;
+
+/* Declarations and Definitions for SfioPtrOpt conversion functions. */
+quote(h,"cnv_opt_decl(padsc,SfioPtr)");
+quote(c,"cnv_opt(padsc,SfioPtr)");
+
+typedef [mltype("sfioPtr option"), 
+	 c2ml(padsml_c2ml_padsc_SfioPtrOpt), 
+	 ml2c(padsml_ml2c_padsc_SfioPtrOpt)] 
+        SfioPtr                     SfioPtrOpt;
+
+/* Hack: IDL defines "byte" as a type, making it illegal as a field
+   identifier.  Unfortunately, the first field of the Ppos_s structure
+   is named byte.  So, we fake out the IDL compile with FIELD_BYTE and
+   fix it in the generated C code with the #define.
+*/
+quote(c,"#define FIELD_BYTE byte");
+
+struct Ppos_s {
+  size_t       FIELD_BYTE;
+  size_t       num;
+  Sfoff_t      offset;
+};
+
+struct Ploc_s {
+  Ppos_t b;
+  Ppos_t e;
+};
+
+struct Pbase_pd_s {
+  Pflags_t    pstate; /* parse state */
+  int         nerr;  /* using int, rather than Puint32, as it seems sufficient. */
+  PerrCode_t  errCode;
+  Ploc_t      loc;
+};
+
+
+/* ================================================================================
+ * USEFUL CONSTANTS
+ *
+ */
+
+/* Mask flags used with read functions */
+const Pbase_m P_Set = 0x0001;
+const Pbase_m P_SynCheck = 0x0002;
+const Pbase_m P_SemCheck = 0x0004;
+const Pbase_m P_DbgRead = 0x0008;
+
+/* Mask flags used with write functions */
+const Pbase_m P_Write = 0x0010;
+const Pbase_m P_WriteVoid = 0x0020;
+const Pbase_m P_WriteMeta = 0x0040;
+
+/* Useful Combinations of Mask Flags */
+const Pbase_m P_CheckAndSet = 0x0007;     /* P_Set|P_SynCheck|P_SemCheck */
+const Pbase_m P_BothCheck = 0x0006;     /* P_SynCheck|P_SemCheck */
+const Pbase_m P_Ignore = 0x0000;     /* none of the checks, no set */
+
+/* ================================================================================
+ * LIBRARY HANDLE OPEN/CLOSE FUNCTIONS
+ *
+ */
+
+[pointer_default(unique)] 
+interface LibraryHandle {
+  Perror_t  P_open  ([out,*ptr] P_t **pads_out, [in] Pdisc_t *disc, [in,ptr] Pio_disc_t *io_disc);
+  Perror_t  P_close ([in,ptr] P_t *pads); 
+}
+
+
+/* ================================================================================
+ * Pstring functions
+ *
+ */
+
+interface Pstring {
+/*  *** No need for this function now that Pstrings are represented as ocaml strings. */
+/*   Perror_t Pstring_cstr_copy([in,ptr] P_t *pads, [out,ref] Pstring *targ,  */
+/* 			     [in,string] const char *src, [in] size_t len) */
+/*     quote(call, */
+/* 	  "Pstring_init(pads,targ); _res = Pstring_cstr_copy(pads, targ, src, len);"); */
+
+  int Pstr_lit_write2io([in,ptr] P_t *pads,[in] SfioPtr io,[in,ref] Pstring *s);
+
+}
+
+/* ================================================================================
+ * MISCELLANY
+ *
+ */
+interface Misc {
+  Tm_zone_t *P_cstr2timezone([in,string] const char *tzone_str);
+
+  /* Open a file for reading, writing, etc. */
+  SfioPtrOpt P_fopen([in,string,unique] const char* source, [in,string] const char* mode);
+  /* Close a file opened by P_fopen. */
+  Perror_t P_fclose([in] SfioPtr io);
+
+
+
+  /* Function wrappers for macros P_POS_... 
+   * Prefix function name with i (for idl).
+   */
+  int iP_POS_EQ([in] Ppos_t first, [in] Ppos_t second);
+  int iP_POS_GT([in] Ppos_t first, [in] Ppos_t second);
+
+  /*****************/
+  /*   Pchar_lit   */
+  /*****************/
+  int Pchar_lit_write2io([in,ptr] P_t *pads,[in] SfioPtr io,[in] Pchar c);
+}
+
+[pointer_default(unique)] 
+interface Disc{
+  PerrorRep P_get_disc_e_rep([in,ptr] P_t *pads);
+  void P_set_disc_e_rep([in,ptr] P_t *pads, [in] PerrorRep er);
+}
+
+interface Sfio{
+  SfioPtrOpt sfnew(SfioPtrOpt f, [string]char * buf, size_t size, int fd, int flags);
+
+  // a hack to get the values of the mode flags, b/c they are #defines:
+  void sfgetmodeflags([out]int *read, [out]int *write, [out]int *appendwr, 
+		      [out]int *string, [out]int *mtsafe);
+
+  // a simple wrapper to sfnew whereby the pre-existing sfio stream, buf and size args are dropped.
+  SfioPtrOpt simple_sfnew(int fd, int flags);
+
+  // wrapper to close write file descriptor of sfio stream. does not close stream itself
+  // returns -1 on error and 0 on success.
+  int sfclose_writefd([in] SfioPtr f);
+
+  SfioPtrOpt sfopen([in] SfioPtrOpt f, [in,string,unique] const char* string, [in,string] const char* mode);
+
+  SfioPtrOpt sfpopen([in] SfioPtrOpt f, [in,string] const char* cmd, [in,string] const char* mode);
+
+  ssize_t sfread([in] SfioPtr io, [string,in] char *buf, [in] size_t n);
+  Sfoff_t sfsize([in] SfioPtr io);
+  [string,unique]char *sfsetbuf([in] SfioPtr f, [in,string,unique] char *buf, [in] size_t size);
+  Sfoff_t sfseek([in] SfioPtr f, [in] Sfoff_t offset, [in] int type);
+  int sfsync([in] SfioPtr f);
+  int sfclose([in] SfioPtr f);
+}
+
+/* ================================================================================
+ * TOP-LEVEL IO FUNCTIONS
+ */
+
+/* Perror_t  P_io_set       (P_t *pads, Sfio_t *io); */
+/* Perror_t  P_io_skip_bytes(P_t *pads, size_t width, size_t *skipped_bytes_out); */
+
+
+interface IO{
+  Perror_t  P_io_set       ([in,ptr] P_t *pads, [in] SfioPtr io);
+  Perror_t  P_io_fopen     ([in,ptr] P_t *pads, [string] const char *path);
+  Perror_t  P_io_close     ([in,ptr] P_t *pads);
+
+  Perror_t  P_io_getPos   ([in,ptr] P_t *pads, [out] Ppos_t *pos, [in] int offset);
+  Perror_t  P_io_getLocB  ([in,ptr] P_t *pads, [out] Ploc_t *loc, [in] int offset);
+  Perror_t  P_io_getLocE  ([in,ptr] P_t *pads, [out] Ploc_t *loc, [in] int offset);
+  Perror_t  P_io_getLoc   ([in,ptr] P_t *pads, [out] Ploc_t *loc, [in] int offset);
+
+  int       P_io_at_eor        ([in,ptr] P_t *pads);
+  int       P_io_at_eof        ([in,ptr] P_t *pads);
+  int       P_io_at_eor_OR_EOF ([in,ptr] P_t *pads);
+  Perror_t  P_io_next_rec  ([in,ptr] P_t *pads, [out] size_t *skipped_bytes_out);
+}
+
+/* ================================================================================
+ * SCAN FUNCTIONS
+ *
+ */
+
+interface Scan{
+  Perror_t Pchar_lit_scan1   ([in,ptr] P_t *pads, [in] Pchar f,
+			      [in] int eat_f, [in] int panic, [out] size_t *offset_out);
+  Perror_t Pstr_lit_scan1    ([in,ptr] P_t *pads, [in,ref] const Pstring *f,
+			      [in] int eat_f, [in] int panic, [out] size_t *offset_out);
+  Perror_t Pcstr_lit_scan1   ([in,ptr] P_t *pads, [in,string] const char *f,
+			      [in] int eat_f, [in] int panic, [out] size_t *offset_out);
+  Perror_t Pre_scan1         ([in,ptr] P_t *pads, [in,ptr] Pregexp_t *f,  
+			      [in] int eat_f, [in] int panic, [out] size_t *offset_out);
+
+  Perror_t Pchar_lit_scan2   ([in,ptr] P_t *pads, [in] Pchar f, [in] Pchar s,
+			      [in] int eat_f, [in] int eat_s, [in] int panic,
+			      [out] int *f_found_out, [out] size_t *offset_out);
+  Perror_t Pstr_lit_scan2    ([in,ptr] P_t *pads, [in,ref] const Pstring *f, [in,ref] const Pstring *s,
+			      [in] int eat_f, [in] int eat_s, [in] int panic,
+			      [out] int *f_found_out, [out] size_t *offset_out);
+  Perror_t Pcstr_lit_scan2   ([in,ptr] P_t *pads, [in,string] const char *f, [in,string] const char *s,
+			      [in] int eat_f, [in] int eat_s, [in] int panic,
+			      [out] int *f_found_out, [out] size_t *offset_out);
+  Perror_t Pre_scan2         ([in,ptr] P_t *pads, [in,ptr] Pregexp_t *f, [in,ptr] Pregexp_t *s,
+			      [in] int eat_f, [in] int eat_s, [in] int panic,
+			      [out] int *f_found_out, [out] size_t *offset_out);
+}
+
+
+/* ================================================================================
+ * MATCH FUNCTIONS
+ *
+ */
+
+interface Match{
+  Perror_t Pchar_lit_match   ([in,ptr] P_t *pads, [in] Pchar f, [in] int eat_f);
+  Perror_t Pstr_lit_match    ([in,ptr] P_t *pads, [in,ref] const Pstring *f, [in] int eat_f);
+  Perror_t Pcstr_lit_match   ([in,ptr] P_t *pads, [in,string] const char *f,[in] int eat_f);
+  Perror_t Pre_match         ([in,ptr] P_t *pads, [in,ptr] Pregexp_t *f, [in] int eat_f);
+  Perror_t Pcstr_re_match    ([in,ptr] P_t *pads, [in,string] const char *f,[in] int eat_f); 
+}
+
+/* ================================================================================
+ * Regular Expression FUNCTIONS
+ *
+ */
+
+interface RegExp{
+/*   void P_REGEXP_FROM_CHAR([in,ptr] P_t *pads, [out] Pregexp_t my_regexp, [in] Pchar char_expr); */
+/*   void P_REGEXP_FROM_CSTR([in,ptr] P_t *pads, [out] Pregexp_t my_regexp, [in] const char *str_expr); */
+/*   void P_REGEXP_FROM_STR([in,ptr] P_t *pads, [out] Pregexp_t my_regexp, [in] Pstring *str_expr); */
+/*   Perror_t Pregexp_compile(P_t *pads, const Pstring *regexp_str, Pregexp_t *regexp); */
+  Perror_t Pregexp_alloc([in,ptr] P_t *pads, [out,*ptr] Pregexp_t **regexp);
+  Perror_t Pregexp_compile_cstr([in,ptr] P_t *pads, [in,string] const char *regexp_str, [in,ptr] Pregexp_t *regexp);
+  Perror_t Pregexp_cleanup([in,ptr] P_t *pads, [in,ptr] Pregexp_t *regexp);  
+  Perror_t Pregexp_free([in,ptr] P_t *pads, [in,ptr] Pregexp_t *regexp);
+}
+
+
+/* ================================================================================
+ * IO CHECKPOINT API
+ *
+ */
+
+interface Checkpoint{
+  Perror_t  P_io_checkpoint  ([in,ptr] P_t *pads, [in] int speculative);
+  Perror_t  P_io_commit      ([in,ptr] P_t *pads);
+  /* Perror_t  P_io_commit_pos  (P_t *pads, Ppos_t pos); */
+  /*           /\* commit at pos rather than using the current IO cursor position *\/ */
+  /*           /\* pos should be >= the checkpoint position and <= the current IO cursor position *\/ */
+  Perror_t  P_io_restore     ([in,ptr] P_t *pads);
+  unsigned int P_spec_level  ([in,ptr] P_t *pads);
+  unsigned int P_is_current_spec  ([in,ptr] P_t *pads);
+}
+
+/* ================================================================================
+ * IO Descriptor API
+ *
+ */
+
+interface IO_Disc{
+
+  [ptr] Pio_disc_t * P_ctrec_make([in] Pbyte termChar, [in] size_t block_size_hint);
+  /* Instantiates an instance of ctrec, a discipline for
+   * character-terminated variable-width records. termChar is the
+   * character that marks the end of a record. block_size_hint is a
+   * hint as to what block size to use, if the discipline chooses to do
+   * fixed block-sized reads 'under the covers'.  It may be ignored by
+   * the discipline.
+   * 
+   * For ASCII newline-terminated records use, '\n' or P_ASCII_NEWLINE
+   * as the term character.  For EBCDIC newline-terminated records, use
+   * P_EBCDIC_NEWLINE as the term character.
+   */
+
+  [ptr] Pio_disc_t * P_norec_make([in] size_t block_size_hint);
+  /* Instantiates an instance of norec, a raw bytes discipline that
+   * does not use records.  block_size_hint is a hint as to what block size
+   * to use, if the discipline chooses to do fixed block-sized reads
+   * 'under the covers'.  It may be ignored by the discipline.
+   */
+
+  [ptr] Pio_disc_t * P_ctrec_noseek_make([in] Pbyte termChar, [in] size_t block_size_hint);
+  /* Instantiates an noseek instance of ctrec, a discipline for
+   * character-terminated variable-width records. termChar is the
+   * character that marks the end of a record. block_size_hint is a
+   * hint as to what block size to use, if the discipline chooses to do
+   * fixed block-sized reads 'under the covers'.  It may be ignored by
+   * the discipline.
+   * 
+   * For ASCII newline-terminated records use, '\n' or P_ASCII_NEWLINE
+   * as the term character.  For EBCDIC newline-terminated records, use
+   * P_EBCDIC_NEWLINE as the term character.
+   */
+
+  [ptr] Pio_disc_t * P_norec_noseek_make([in] size_t block_size_hint);
+  /* Instantiates an noseek instance of norec, a raw bytes discipline that
+   * does not use records.  block_size_hint is a hint as to what block size
+   * to use, if the discipline chooses to do fixed block-sized reads
+   * 'under the covers'.  It may be ignored by the discipline.
+   */
+}
+
+
+interface Internal{
+
+  /** N.B. the msg argument is treated as a format string (ala. printf). 
+      Therefore, any content that might be misinterpreted must be escaped.
+  */
+  Perror_t PDCI_report_err([in,ptr] P_t *pads, [in] int level, [in,ref] Ploc_t *loc,
+			   [in] PerrCode_t errCode, [in, string] const char *whatfn, [in,string, unique] const char *msg);
+
+  /**
+     Basically a hack to get the values of the P_LEV_XXX elements because they are 
+     defined with #define.
+   */
+  void P_get_error_levels([out]int *lev_info, 
+			[out]int *lev_warn,
+			[out]int *lev_error,
+			[out]int *lev_fatal);
+
+  ssize_t PDCI_io_rec_open_write2io  ([in,ptr] P_t *pads, [in] SfioPtr io, [string] const char *whatfn);
+  ssize_t PDCI_io_rec_close_write2io ([in,ptr] P_t *pads, [in] SfioPtr io, [string] const char *whatfn);
+}
